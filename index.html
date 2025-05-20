@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reseller Panel Pterodactyl</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+    }
+    header {
+      background: #007bff;
+      color: white;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .menu-icon {
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    .menu {
+      display: none;
+      background: white;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      position: absolute;
+      top: 3.5rem;
+      left: 1rem;
+      border-radius: 0.5rem;
+    }
+    .menu a {
+      display: block;
+      padding: 0.75rem 1rem;
+      text-decoration: none;
+      color: #333;
+      border-bottom: 1px solid #eee;
+    }
+    .menu a:last-child {
+      border-bottom: none;
+    }
+    .container {
+      padding: 2rem;
+      max-width: 600px;
+      margin: auto;
+    }
+    .box {
+      border: 2px solid #ccc;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+    }
+    .box.selected {
+      border-color: #007bff;
+      background: #e7f1ff;
+    }
+    .payment-methods {
+      margin: 1rem 0;
+    }
+    .payment-option {
+      margin-bottom: 0.5rem;
+    }
+    .qris-img {
+      display: none;
+      max-width: 100%;
+      margin-top: 1rem;
+    }
+    button.copy-btn {
+      margin-left: 1rem;
+      padding: 0.3rem 0.75rem;
+      font-size: 0.8rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #007bff;
+      color: white;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 1.5rem;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="menu-icon" onclick="toggleMenu()">☰</div>
+  <div style="font-weight: bold;">Reseller Panel Pterodactyl</div>
+  <div></div>
+</header>
+
+<div class="menu" id="menu">
+  <a href="https://link-home-kamu.com">Home</a>
+  <a href="https://wa.me/6283856752850">Contact Support</a>
+</div>
+
+<div class="container">
+  <h2>Reseller Panel Pterodactyl</h2>
+  <p>Jadilah reseller dan miliki akses ke panel Pterodactyl untuk dijual kembali! Harga mulai dari Rp 10.000 dengan fitur premium dan kemudahan manajemen user.</p>
+
+  <div id="panels">
+    <div class="box" onclick="selectPanel(this, 'Reseller Panel - Rp 10.000')">Reseller Panel - Rp 10.000</div>
+  </div>
+
+  <h3>Pilih Metode Pembayaran</h3>
+  <div class="payment-methods">
+    <div class="payment-option">
+      <input type="radio" name="payment" value="dana" onchange="showQR(false)"> Dana (083856752850)
+      <button class="copy-btn" onclick="copyText('083856752850')">Copy</button>
+    </div>
+    <div class="payment-option">
+      <input type="radio" name="payment" value="gopay" onchange="showQR(false)"> GoPay (083856752850)
+      <button class="copy-btn" onclick="copyText('083856752850')">Copy</button>
+    </div>
+    <div class="payment-option">
+      <input type="radio" name="payment" value="qris" onchange="showQR(true)"> QRIS
+    </div>
+    <img id="qris" class="qris-img" src="https://i.postimg.cc/ydF74xxS/20250520-114937.jpg" alt="QRIS Code">
+  </div>
+
+  <h3>Platform Pesan</h3>
+  <div class="payment-option">
+    <input type="radio" name="platform" value="whatsapp"> WhatsApp
+  </div>
+  <div class="payment-option">
+    <input type="radio" name="platform" value="telegram"> Telegram
+  </div>
+
+  <button onclick="orderNow()">Pesan Sekarang</button>
+</div>
+
+<footer>
+  &copy; 2025 FaaStore.Id - Solusi hosting terbaik.
+</footer>
+
+<script>
+  let selectedPanel = '';
+
+  function toggleMenu() {
+    const menu = document.getElementById('menu');
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+  }
+
+  function selectPanel(el, text) {
+    document.querySelectorAll('.box').forEach(box => box.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedPanel = text;
+  }
+
+  function showQR(show) {
+    document.getElementById('qris').style.display = show ? 'block' : 'none';
+  }
+
+  function copyText(text) {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('Nomor berhasil dicopy!');
+    });
+  }
+
+  function orderNow() {
+    const platform = document.querySelector('input[name="platform"]:checked');
+    const payment = document.querySelector('input[name="payment"]:checked');
+
+    if (!selectedPanel || !platform || !payment) {
+      alert('Silakan pilih paket, metode pembayaran, dan platform terlebih dahulu.');
+      return;
+    }
+
+    const message = `Halo, saya ingin memesan:\n\nPaket: ${selectedPanel}\nPembayaran: ${payment.value.toUpperCase()}\n\nSaya akan kirim bukti pembayaran setelah ini.`;
+
+    let url = '';
+    if (platform.value === 'whatsapp') {
+      url = `https://wa.me/6283856752850?text=${encodeURIComponent(message)}`;
+    } else {
+      url = `https://t.me/faa_store?text=${encodeURIComponent(message)}`;
+    }
+
+    window.location.href = url;
+  }
+</script>
+
+</body>
+</html>
